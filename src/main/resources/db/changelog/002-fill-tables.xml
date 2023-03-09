@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="2" author="mallet322@gmail.com">
+        <loadData
+                file="db/data/socks.csv"
+                separator=";"
+                tableName="socks">
+            <column name="date_start" type="date"/>
+            <column name="date_end" type="date"/>
+            <column name="color" type="string"/>
+            <column name="cotton_part" type="numeric"/>
+            <column name="quantity" type="numeric"/>
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

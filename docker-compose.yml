@@ -1,0 +1,19 @@
+version: "3"
+
+services:
+  postgres:
+    image: 'postgres:latest'
+    container_name: socks-database
+    environment:
+      - 'POSTGRES_USER=postgres'
+      - 'POSTGRES_PASSWORD=pass'
+      - 'POSTGRES_DB=socks'
+    ports:
+      - "5434:5434"
+    command: -p 5434
+
+  app:
+    build: ./
+    container_name: cib-interns-test-task
+    ports:
+      - "8080:8080"

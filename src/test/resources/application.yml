@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY;DATABASE_TO_UPPER=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: sa
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.jdbc.time_zone: UTC
+    open-in-view: false
+  liquibase:
+    enabled: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 519795840998-37dgekgcdcihkgdrp1jvib0kfa7a682v.apps.googleusercontent.com
+            client-secret: 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
+            scope: openid, profile, email
+      resource-server:
+        jwt:
+          issuer-uri: https://accounts.google.com/o/oauth2/auth
+          jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
