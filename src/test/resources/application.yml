@@ -23,3 +23,15 @@ spring:
         jwt:
           issuer-uri: https://accounts.google.com/o/oauth2/auth
           jwk-set-uri: https://www.googleapis.com/oauth2/v3/certs
+mail:
+  from: popka@gmail.com
+  email: mallet322@gmail.com
+  password: fqimkvzstsgwhuaf
+  protocol: smtp
+  encoding: utf-8
+  debug: true
+  smtp:
+    name: smtp.gmail.com
+    port: 587
+    auth: true
+    starttlsenable: true

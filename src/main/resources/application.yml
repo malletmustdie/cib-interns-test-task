@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://postgres:5434/socks
+    url: jdbc:postgresql://localhost:5432/socks
     username: postgres
-    password: pass
+    password: postgres
   jpa:
     show-sql: true
     properties:
@@ -37,3 +37,15 @@ springdoc:
 swagger-security:
   authorization-url: ${spring.security.oauth2.resource-server.jwt.issuer-uri}
   token-url: https://oauth2.googleapis.com/token
+
+mail:
+  email: malletapp322@gmail.com
+  password: iisqgkxwyfbhlkbt
+  protocol: smtp
+  encoding: utf-8
+  debug: true
+  smtp:
+    name: smtp.gmail.com
+    port: 587
+    auth: true
+    starttlsenable: true

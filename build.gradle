@@ -34,6 +34,7 @@ ext {
     testContainersVersion = '1.16.2'
     javaxPersistenceApiVersion = '2.2'
     javaeeApiVersion = '8.0.1'
+    javaMail = '1.6.2'
 }
 
 apply plugin: "io.spring.dependency-management"
@@ -79,6 +80,13 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     implementation "org.springframework.security:spring-security-oauth2-client"
+
+    // Spring integration and mail
+    implementation 'org.springframework.boot:spring-boot-starter-integration'
+    implementation 'org.springframework.integration:spring-integration-http'
+    implementation 'org.springframework.integration:spring-integration-mail'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation "com.sun.mail:javax.mail:${javaMail}"
 
     // Others
     implementation "org.apache.commons:commons-lang3:${commonsLangVersion}"

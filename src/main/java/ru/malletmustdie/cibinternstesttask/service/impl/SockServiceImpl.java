@@ -2,11 +2,14 @@ package ru.malletmustdie.cibinternstesttask.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.malletmustdie.cibinternstesttask.dto.SockDto;
@@ -17,6 +20,7 @@ import ru.malletmustdie.cibinternstesttask.mapper.SockMapper;
 import ru.malletmustdie.cibinternstesttask.model.Sock;
 import ru.malletmustdie.cibinternstesttask.repository.SockRepository;
 import ru.malletmustdie.cibinternstesttask.repository.custom.SockCustomRepository;
+import ru.malletmustdie.cibinternstesttask.service.MailMessageService;
 import ru.malletmustdie.cibinternstesttask.service.MessageSourceHelper;
 import ru.malletmustdie.cibinternstesttask.service.SockService;
 
@@ -32,6 +36,11 @@ public class SockServiceImpl implements SockService {
     private final SockMapper sockMapper;
 
     private final MessageSourceHelper messageSourceHelper;
+
+    private final MailMessageService mailMessageService;
+
+    @Qualifier("sendMailChannel")
+    private final MessageChannel sendMailChannel;
 
     @Override
     @Transactional
@@ -74,6 +83,7 @@ public class SockServiceImpl implements SockService {
     private BusinessException throwException(ErrorType errorType, Object... placeholders) {
         var msg = messageSourceHelper.getMessage(errorType, placeholders);
         log.error(msg);
+        sendMailChannel.send(MessageBuilder.withPayload(mailMessageService.convertToMailMessage(msg)).build());
         return new BusinessException(errorType, msg);
     }
 
