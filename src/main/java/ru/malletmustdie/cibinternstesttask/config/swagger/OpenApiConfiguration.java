@@ -1,16 +1,11 @@
 package ru.malletmustdie.cibinternstesttask.config.swagger;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.extensions.Extension;
-import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.security.OAuthFlow;
 import io.swagger.v3.oas.annotations.security.OAuthFlows;
-import io.swagger.v3.oas.annotations.security.OAuthScope;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
-import io.swagger.v3.oas.annotations.security.SecuritySchemes;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
@@ -19,47 +14,18 @@ import org.springdoc.core.customizers.OpenApiCustomiser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.EMAIL_SCOPE;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.JWT_AUTHORIZATION;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.JWT_AUTHORIZATION_DESCRIPTION;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.OAUTH2_AUTHORIZATION;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.OAUTH2_AUTHORIZATION_DESCRIPTION;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.OPEN_ID_SCOPE;
-import static ru.malletmustdie.cibinternstesttask.util.OpenApiConstants.PROFILE_SCOPE;
 
 @OpenAPIDefinition(security = {
-        @SecurityRequirement(name = OAUTH2_AUTHORIZATION),
-        @SecurityRequirement(name = JWT_AUTHORIZATION),
+        @SecurityRequirement(name = "security_auth")
 })
-@SecuritySchemes(
-        value = {
-                @SecurityScheme(
-                        name = OAUTH2_AUTHORIZATION,
-                        description = OAUTH2_AUTHORIZATION_DESCRIPTION,
-                        type = SecuritySchemeType.OAUTH2,
-                        flows = @OAuthFlows(
-                                authorizationCode = @OAuthFlow(
-                                        authorizationUrl = "${swagger-security.authorization-url}",
-                                        tokenUrl = "${swagger-security.token-url}",
-                                        scopes = {
-                                                @OAuthScope(name = OPEN_ID_SCOPE),
-                                                @OAuthScope(name = PROFILE_SCOPE),
-                                                @OAuthScope(name = EMAIL_SCOPE)
-                                        }
-                                )
-                        ),
-                        extensions = @Extension(
-                                properties = @ExtensionProperty(name = "x-tokenName", value = "id_token")
-                        )
-                ),
-                @SecurityScheme(
-                        name = JWT_AUTHORIZATION,
-                        description = JWT_AUTHORIZATION_DESCRIPTION,
-                        type = SecuritySchemeType.APIKEY,
-                        in = SecuritySchemeIn.HEADER
+@SecurityScheme(name = "security_auth", type = SecuritySchemeType.OAUTH2,
+                flows = @OAuthFlows(
+                        authorizationCode = @OAuthFlow(
+                                authorizationUrl = "${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/auth",
+                                tokenUrl = "${spring.security.oauth2.resource-server.jwt.issuer-uri}/protocol/openid-connect/token")
                 )
-        }
 )
+
 @Configuration
 @RequiredArgsConstructor
 public class OpenApiConfiguration {

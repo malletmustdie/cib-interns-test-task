@@ -7,7 +7,7 @@ public class OpenApiConstants {
 
     public static final String OAUTH2_AUTHORIZATION = "OAuth2 authorization";
 
-    public static final String OAUTH2_AUTHORIZATION_DESCRIPTION = "Authorization with Google";
+    public static final String OAUTH2_AUTHORIZATION_DESCRIPTION = "Authorization with keycloak";
 
     public static final String JWT_AUTHORIZATION = "Authorization";
 

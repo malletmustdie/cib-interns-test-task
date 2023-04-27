@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import static org.mockito.Mockito.never;
@@ -17,8 +18,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.messaging.MessageChannel;
 import ru.malletmustdie.cibinternstesttask.AbstractDataFactoryNonContext;
 import ru.malletmustdie.cibinternstesttask.dto.SockDto;
 import ru.malletmustdie.cibinternstesttask.exception.BusinessException;
@@ -30,6 +34,7 @@ import ru.malletmustdie.cibinternstesttask.mapper.SockMapper;
 import ru.malletmustdie.cibinternstesttask.model.Sock;
 import ru.malletmustdie.cibinternstesttask.repository.SockRepository;
 import ru.malletmustdie.cibinternstesttask.repository.custom.SockCustomRepository;
+import ru.malletmustdie.cibinternstesttask.service.MailMessageService;
 import ru.malletmustdie.cibinternstesttask.service.MessageSourceHelper;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,6 +58,12 @@ class SockServiceImplTest extends AbstractDataFactoryNonContext {
 
     @Mock
     private MessageSourceHelper messageSourceHelper;
+
+    @Mock
+    private MailMessageService mailMessageService;
+
+    @Mock
+    private MessageChannel sendMailChannel;
 
     @InjectMocks
     private SockServiceImpl sockService;
@@ -102,6 +113,8 @@ class SockServiceImplTest extends AbstractDataFactoryNonContext {
     @Test
     void whenCreateOutcomeOperationWithIncorrectEntityThenThrowException() {
         var dto = getDto();
+        when(mailMessageService.convertToMailMessage(anyString())).thenReturn(mockMsg());
+        when(sendMailChannel.send(any())).thenReturn(true);
         when(sockRepository.findByColorAndCottonPart(any(), any())).thenReturn(Optional.empty());
         when(messageSourceHelper.getMessage(any(ErrorType.class), any())).thenReturn("some-msg");
         assertThatThrownBy(() -> sockService.createOutcomeOperation(dto))
@@ -149,6 +162,15 @@ class SockServiceImplTest extends AbstractDataFactoryNonContext {
         criteria.setColor(stringFilter);
         criteria.setCottonPart(numberFilter);
         return criteria;
+    }
+
+    private SimpleMailMessage mockMsg() {
+        var mailMessage = new SimpleMailMessage();
+        mailMessage.setSubject("Error!");
+        mailMessage.setText("text");
+        mailMessage.setTo("asdasd@gmail.com");
+        mailMessage.setFrom("smtpName");
+        return mailMessage;
     }
 
 }

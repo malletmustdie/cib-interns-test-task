@@ -55,6 +55,7 @@ configurations {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        mavenBom 'org.keycloak.bom:keycloak-adapter-bom:11.0.2'
     }
 }
 
@@ -77,6 +78,7 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation"
 
     // Security
+    implementation 'org.keycloak:keycloak-spring-boot-starter'
     implementation "org.springframework.boot:spring-boot-starter-security"
     implementation "org.springframework.boot:spring-boot-starter-oauth2-resource-server"
     implementation "org.springframework.security:spring-security-oauth2-client"
